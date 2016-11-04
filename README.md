@@ -27,6 +27,10 @@ node).
 ```
 docker-compose -f docker-compose.dev.yml -f docker-compose.yml up
 ```
+If launched with the .dev.yml file, you can now access the **publicly** exposed
+web3 endpoint at http://HOST:38080/web3 and browser-solidity at
+http://HOST:38080/
+
 # Useful commands
 Attach to geth (where **DATA_DIR** should be remplaced by the appropriate value
 from your docker-composer.yml file).
