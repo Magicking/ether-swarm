@@ -60,6 +60,10 @@ exec /geth \
 --ipcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" \
 --rpcapi "db,eth,net,web3" \
 --rpcaddr "0.0.0.0" \
+--ws \
+--wsaddr "0.0.0.0" \
+--wsapi "db,eth,net,web3" \
+--wsorigins "*" \
 --autodag \
 --networkid 1900 \
 --nat none \
