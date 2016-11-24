@@ -9,9 +9,10 @@ RUN apt-get update && \
 RUN mkdir -p /usr/src/browser-solidity
 WORKDIR /usr/src/browser-solidity
 
-COPY set-default-docker-endpoint.patch /tmp/
-RUN git clone https://github.com/ethereum/browser-solidity.git . && \
-    git apply /tmp/set-default-docker-endpoint.patch
+#COPY set-default-docker-endpoint.patch /tmp/
+RUN git clone https://github.com/ethereum/browser-solidity.git .
+#RUN git clone https://github.com/ethereum/browser-solidity.git . && \
+#    git apply /tmp/set-default-docker-endpoint.patch
 
 RUN npm install && \
     npm run build
