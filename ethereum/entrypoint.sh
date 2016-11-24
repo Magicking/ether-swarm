@@ -41,7 +41,6 @@ import_keys() {
   fi
   find "${GG_PATH_PKEYS}"/ -type f | while read key; do
     /geth --datadir "${DATA_DIR}" --password "${PWD_FILE}" account import "${key}"
-    rm -v "${key}"
   done
 }
 
