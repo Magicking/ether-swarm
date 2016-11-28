@@ -11,7 +11,6 @@ services:
       - ethvol:/root/eth
     environment:
       - DATA_DIR=/root/eth/datadir
-      - ENV_FILE=/root/eth/ENV.sh
       - ACCOUNT_PASSWORD=deadbeef
       - GG_PATH_PKEYS=/root/eth/keys
       - GG_PATH_GENESIS=/root/eth/genesis.json

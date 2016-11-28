@@ -1,20 +1,26 @@
 version: '2'
 services:
-  rev-proxy:
-    build: nginx
-    ports:
-      - "38080:80"
+#  rev-proxy:
+#    build: nginx
+#    ports:
+#      - "38080:80"
+#    links:
+#      - geth
+#      - browser-solidity
 
   utils:
     build: utils
     environment:
-      - ENV_FILE=/root/eth/ENV.sh
       - GG_PATH_PKEYS=/root/eth/keys
       - GG_PATH_GENESIS=/root/eth/genesis.json
+      - GG_ALLOCATOR=10
     volumes:
       - ethvol:/root/eth
 
-  browser-solidity:
-    build: browser-solidity
-    ports:
-      - "8080"
+#  browser-solidity:
+#    build: browser-solidity
+#    ports:
+#      - "8080"
+
+volumes:
+  ethvol: {}

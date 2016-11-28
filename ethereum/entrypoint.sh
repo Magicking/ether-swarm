@@ -1,35 +1,23 @@
 #!/bin/sh
 
 PWD_FILE=`mktemp`
+ENV_FILE="/env.sh"
 echo "${ACCOUNT_PASSWORD}" > "$PWD_FILE"
 
 if ! [ "$#" -gt 0 ]; then
   exec "$@"
 fi
 
-if ! [ -f "${ENV_FILE}" ]; then
-  echo "${ENV_FILE} not present please run"
-  echo "docker-compose run utils"
-  exit 1
-fi
-
+if [ -f "${ENV_FILE}" ]; then
  . "${ENV_FILE}"
-
-if [ x"${ETHERBASE}" == "x" ]; then
-  echo "ETHERBASE not set please run"
-  echo "docker-compose run utils"
-  exit 1
 fi
 
 import_genesis() {
-  if ! [ -d "${DATA_DIR}" ] && ! [ -f "${GG_PATH_GENESIS}" ]; then
-    echo Base dir not existing and genesis configuration not present
-    exit 1
-  fi
   if [ -f "${GG_PATH_GENESIS}" ]; then
-    /geth --datadir "${DATA_DIR}" init "${GG_PATH_GENESIS}"
-    rm -v "${GG_PATH_GENESIS}".bak
-    mv -v "${GG_PATH_GENESIS}" "${GG_PATH_GENESIS}".bak
+    /geth --datadir "${DATA_DIR}" init "${GG_PATH_GENESIS}" || exit 1
+  else
+    echo "Base genesis configuration not found please run utils init first"
+    exit 1
   fi
 }
 
@@ -41,11 +29,26 @@ import_keys() {
   fi
   find "${GG_PATH_PKEYS}"/ -type f | while read key; do
     /geth --datadir "${DATA_DIR}" --password "${PWD_FILE}" account import "${key}"
+    echo "Consuming ${key}"
+    rm -v "${key}"
+    etherbase=`echo -n ${key} | grep -o '0x.*'`
+cat > "${ENV_FILE}" <<HEREDOC
+#!/bin/sh
+
+ETHERBASE="${etherbase}"
+HEREDOC
+  chmod +x "${ENV_FILE}"
+    break
   done
 }
 
-import_genesis
-import_keys
+if ! [ -d "${DATA_DIR}"/chainstate ]; then
+  import_genesis
+fi
+if [ x"${ETHERBASE}" == "x" ]; then
+  import_keys
+  . "${ENV_FILE}"
+fi
 
 exec /geth \
 --datadir "${DATA_DIR}" \
