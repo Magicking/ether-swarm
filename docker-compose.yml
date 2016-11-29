@@ -1,19 +1,35 @@
 version: '2'
 services:
+  bootnode:
+    build: ethereum-bootnode
+    volumes:
+      - ethvol:/ethvol
+
   geth:
     build: ethereum
     ports:
       - "8080"
       - "8545"
       - "8546"
-      - "30303"
     volumes:
-      - ethvol:/root/eth
+      - ethvol:/ethvol
     environment:
-      - DATA_DIR=/root/eth/datadir
+      - DATA_DIR=/datadir
       - ACCOUNT_PASSWORD=deadbeef
-      - GG_PATH_PKEYS=/root/eth/keys
-      - GG_PATH_GENESIS=/root/eth/genesis.json
+      - GG_PATH_PKEYS=/ethvol/keys
+      - GG_PATH_GENESIS=/ethvol/genesis.json
+      - ENODE_HOST=bootnode
+    links:
+      - bootnode
+
+  utils:
+    build: utils
+    environment:
+      - GG_PATH_PKEYS=/ethvol/keys
+      - GG_PATH_GENESIS=/ethvol/genesis.json
+      - GG_ALLOCATOR=10
+    volumes:
+      - ethvol:/ethvol
 
 volumes:
   ethvol: {}
