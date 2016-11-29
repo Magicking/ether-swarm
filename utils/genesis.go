@@ -155,7 +155,7 @@ func main() {
 			EnvVar: "GG_ALLOCATOR",
 		},
 		cli.StringFlag{
-			Name:   "base-balance",
+			Name:   "balance",
 			Usage:  "Balance for each allocator in the Genesis block (e.g: 20000000000000000000)",
 			Value:  "20000000000000000000",
 			EnvVar: "GG_BASE_BALANCE",
