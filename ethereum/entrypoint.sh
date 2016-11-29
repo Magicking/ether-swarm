@@ -32,7 +32,7 @@ import_keys() {
     if mv "${key}" /node_key; then
       /geth --datadir "${DATA_DIR}" --password "${PWD_FILE}" account import /node_key
       echo "Consuming ${key}"
-      etherbase=`echo -n /node_key | grep -o '0x.*'`
+      etherbase=`echo -n "${key}" | grep -o '0x.*'`
 cat > "${ENV_FILE}" <<HEREDOC
 #!/bin/sh
 
