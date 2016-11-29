@@ -37,6 +37,7 @@ cat > "${ENV_FILE}" <<HEREDOC
 #!/bin/sh
 
 ETHERBASE="${etherbase}"
+export ETHERBASE
 HEREDOC
       chmod +x "${ENV_FILE}"
     fi
@@ -44,7 +45,8 @@ HEREDOC
   done
 }
 
-if ! [ -d "${DATA_DIR}"/chainstate ]; then
+if ! [ -d "${DATA_DIR}"/geth/chaindata ]; then
+  echo "import genesis"
   import_genesis
 fi
 if [ x"${ETHERBASE}" == "x" ]; then
