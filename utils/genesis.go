@@ -37,7 +37,7 @@ func NewAllocator(balance string) (string, string, *Allocator, error) {
 		return "", "", nil, err
 	}
 	address := crypto.PubkeyToAddress(privateKey.PublicKey)
-	privHex := fmt.Sprintf("%x", privateKey.D)
+	privHex := fmt.Sprintf("%064x", privateKey.D)
 	allocator := Allocator{Code: "", Storage: nil, Balance: balance}
 	return address.Hex(), privHex, &allocator, nil
 }
