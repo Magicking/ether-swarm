@@ -32,5 +32,18 @@ services:
     volumes:
       - ethvol:/ethvol
 
+  browser-solidity:
+    build: browser-solidity
+    ports:
+      - "8080"
+
+  rev-proxy:
+    build: nginx
+    ports:
+      - "41234:80"
+    links:
+      - geth
+      - browser-solidity
+
 volumes:
   ethvol: {}
