@@ -70,6 +70,12 @@ if ! [ -f "${KEY_ENV}" ]; then
   fi
 fi
 
+if [ x"${MINE}" = "x0" ]; then
+  mineopts=""
+else
+  mineopts="--mine --minerthreads 1"
+fi
+
 . "${KEY_ENV}"
 host_ip=`ping -c 1 -q "${ENODE_HOST}" | grep PING | cut -d '(' -f 2 | cut -d ')' -f 1`
 enodes_list="enode://${BOOTNODE_PUBKEY}@${host_ip}:30303"
@@ -92,7 +98,6 @@ exec /geth \
 --autodag \
 --networkid 1900 \
 --nat none \
---mine \
---minerthreads 1 \
+$mineopts \
 --etherbase "${ETHERBASE}" \
 --jitvm false

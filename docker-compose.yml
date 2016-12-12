@@ -19,6 +19,7 @@ services:
       - GG_PATH_PKEYS=/ethvol/keys
       - GG_PATH_GENESIS=/ethvol/genesis.json
       - ENODE_HOST=bootnode
+      - MINE=1 # Set to 0 to disable mining
     links:
       - bootnode
 
