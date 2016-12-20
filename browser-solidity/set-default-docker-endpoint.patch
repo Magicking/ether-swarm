@@ -1,17 +1,17 @@
-From f37fc3db49772b0945524cee012837f43eb3b6cd Mon Sep 17 00:00:00 2001
-From: Magicking <s@6120.eu>
-Date: Fri, 4 Nov 2016 14:51:18 +0100
-Subject: [PATCH] Patch to default to "/web3" url endpoint with web3
+From 9eeff6264bc672451a083429f713f9da5f736122 Mon Sep 17 00:00:00 2001
+From: Sylvain Laurent <s@6120.eu>
+Date: Tue, 20 Dec 2016 20:00:27 +0100
+Subject: [PATCH] Set default endpoint to private blockchain
 
 ---
- src/app/execution-context.js | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ src/app/execution-context.js | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/src/app/execution-context.js b/src/app/execution-context.js
-index a00bbc2..41bd7e6 100644
+index 1713604..422e83f 100644
 --- a/src/app/execution-context.js
 +++ b/src/app/execution-context.js
-@@ -13,7 +13,7 @@ if (typeof window.web3 !== 'undefined') {
+@@ -15,7 +15,7 @@ if (typeof window.web3 !== 'undefined') {
    injectedProvider = window.web3.currentProvider
    web3 = new Web3(injectedProvider)
  } else {
@@ -19,8 +19,8 @@ index a00bbc2..41bd7e6 100644
 +  web3 = new Web3(new Web3.providers.HttpProvider('/web3'))
  }
  
- var vm = new EthJSVM(null, null, { activatePrecompiles: true, enableHomestead: true })
-@@ -25,7 +25,7 @@ vm.stateManager.checkpoint()
+ /*
+@@ -69,7 +69,7 @@ vm.stateManager.checkpoint()
  function ExecutionContext () {
    var self = this
    this.event = new EventManager()
@@ -29,16 +29,16 @@ index a00bbc2..41bd7e6 100644
  
    this.isVM = function () {
      return executionContext === 'vm'
-@@ -58,6 +58,10 @@ function ExecutionContext () {
+@@ -101,6 +101,9 @@ function ExecutionContext () {
+   if (web3.providers && web3.currentProvider instanceof web3.providers.IpcProvider) {
      $web3endpoint.val('ipc')
    }
- 
 +  if (web3.providers && web3.currentProvider instanceof web3.providers.HttpProvider) {
 +    $web3endpoint.val(web3.currentProvider.host);
 +  }
-+
+ 
    setExecutionContextRadio()
  
-   $injectedToggle.on('change', executionContextUIChange)
 -- 
-2.10.0
+2.11.0
+

@@ -1,18 +1,11 @@
 FROM node
 MAINTAINER "Sylvain Laurent <s@6120.eu>"
 
-# Install dependency packages
-RUN apt-get update && \
-    apt-get install -y git-core
-
-# Install browser-solidity
-RUN mkdir -p /usr/src/browser-solidity
+ADD browser-solidity /usr/src/browser-solidity
+ADD set-default-docker-endpoint.patch /tmp/
+#ADD set-default-docker-endpoint.patch /tmp/set-default-docker-endpoint.patch
 WORKDIR /usr/src/browser-solidity
-
-#COPY set-default-docker-endpoint.patch /tmp/
-RUN git clone https://github.com/ethereum/browser-solidity.git .
-#RUN git clone https://github.com/ethereum/browser-solidity.git . && \
-#    git apply /tmp/set-default-docker-endpoint.patch
+RUN patch -p1 < /tmp/set-default-docker-endpoint.patch
 
 RUN npm install && \
     npm run build
