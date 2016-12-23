@@ -6,3 +6,4 @@
  * Convert genesis.go to web service to consume / generate genesis and configuration
  * Write tests.
  * Update / write documentation
+ * Add vendor for metadata services
