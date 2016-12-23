@@ -22,6 +22,7 @@ services:
       - MINE=1 # Set to 0 to disable mining
     links:
       - bootnode
+      - eth-netstats
 
   utils:
     build: utils
@@ -36,6 +37,13 @@ services:
     build: browser-solidity
     ports:
       - "8080"
+
+  eth-netstats:
+    build: eth-netstats
+    environment:
+      - WS_SECRET=toto
+    ports:
+      - "41235:3000"
 
   rev-proxy:
     build: nginx

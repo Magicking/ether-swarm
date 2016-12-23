@@ -80,6 +80,7 @@ fi
 host_ip=`ping -c 1 -q "${ENODE_HOST}" | grep PING | cut -d '(' -f 2 | cut -d ')' -f 1`
 enodes_list="enode://${BOOTNODE_PUBKEY}@${host_ip}:30303"
 echo "# $enodes_list #"
+
 exec /geth \
 --datadir "${DATA_DIR}" \
 --password "${PWD_FILE}" \

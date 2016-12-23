@@ -1,0 +1,29 @@
+[
+  {
+    "name"              : "ethereum node",
+    "script"            : "/entrypoint.sh",
+    "cwd"               : "/",
+    "log_date_format"   : "YYYY-MM-DD HH:mm Z",
+    "exec_interpreter"  : "sh"
+  },
+  {
+    "name"              : "node-app",
+    "script"            : "app.js",
+    "cwd"               : "/usr/src/eth-net-intelligence-api",
+    "log_date_format"   : "YYYY-MM-DD HH:mm Z",
+    "max_restarts"      : 10,
+    "exec_interpreter"  : "node",
+    "env":
+    {
+      "NODE_ENV"        : "debug",
+      "RPC_HOST"        : "localhost",
+      "RPC_PORT"        : "8545",
+      "LISTENING_PORT"  : "30303",
+      "INSTANCE_NAME"   : "INSTANCE TODO",
+      "CONTACT_DETAILS" : "",
+      "WS_SERVER"       : "ws://eth-netstats:3000",
+      "WS_SECRET"       : "toto",
+      "VERBOSITY"       : 2
+    }
+  }
+]

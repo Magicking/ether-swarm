@@ -4,3 +4,12 @@
 [submodule "ethereum/go-ethereum"]
 	path = ethereum/go-ethereum
 	url = https://github.com/ethereum/go-ethereum
+[submodule "ethereum-bootnode/go-ethereum"]
+	path = ethereum-bootnode/go-ethereum
+	url = https://github.com/ethereum/go-ethereum
+[submodule "eth-netstats/eth-netstats"]
+	path = eth-netstats/eth-netstats
+	url = https://github.com/cubedro/eth-netstats
+[submodule "ethereum/eth-net-intelligence-api"]
+	path = ethereum/eth-net-intelligence-api
+	url = https://github.com/Magicking/eth-net-intelligence-api
