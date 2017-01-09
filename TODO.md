@@ -1,4 +1,5 @@
- * Populate DAG from cache
+ * Validate every input with specification if possible
+ * Populate DAG from cache see https://github.com/ethereum/wiki/wiki/Mining
  * Metadata service to avoid the use of volume
  * Custom name for instance (ip ?)
  * Add blockchain explorer
