@@ -4,6 +4,9 @@ GETH=/geth
 DATA_DIR=/data
 GENESIS_PATH="${DATA_DIR}/genesis.conf"
 SVC_ENDPOINT="${SVC_URI}/blockchain/info"
+EPOCH0_FILE="full-R23-0000000000000000"
+EPOCH0_URL="${SVC_CACHE_URI}/dag/${EPOCH0_FILE}"
+ETHASH_DIR="/root/.ethash" #TODO switch to proper user
 
 mkdir -vp "${DATA_DIR}"
 
@@ -22,9 +25,26 @@ import_genesis() {
   done
 }
 
+import_ethash() {
+  while true; do
+    curl -sL "${EPOCH0_URL}" -o "${ETHASH_DIR}/${EPOCH0_FILE}"
+    if [ -f "${ETHASH_DIR}/${EPOCH0_FILE}" ]; then
+      break
+    fi
+    echo "Waiting 5 secs: ${EPOCH0_URL}"
+    sleep 5
+  done
+}
+
 if ! [ -d "${DATA_DIR}"/geth/chaindata ]; then
   echo "Importing genesis"
   import_genesis
+fi
+
+if ! [ -d "${ETHASH_DIR}" ]; then
+  echo "Importing ethash"
+  mkdir "${ETHASH_DIR}"
+  import_ethash
 fi
 # 
 # wait for bootnode to be populated
@@ -60,7 +80,7 @@ done
 networkid=$(cat "$networkid_file")
 rm "$networkid_file"
 
-ETHERBASE="0x555dec3aa45317fa672cc1b0b7da077df62a091b" #TODO get from services
+#ETHERBASE="0x555dec3aa45317fa672cc1b0b7da077df62a091b" #TODO get from services
 
 # start geth
 exec /geth \

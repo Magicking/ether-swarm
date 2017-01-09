@@ -15,8 +15,9 @@ services:
       - "8545"
       - "8546"
     environment:
-      - MINE=1 # Set to 0 to disable mining
+      - ETHERBASE=0x68f75ae6de5921d0a5edb093e954a25406d0f6f4
       - SVC_URI=http://ether-swarm-services:8090
+      - SVC_CACHE_URI=http://ether-swarm-cache:8091
     links:
       - bootnode
       - eth-netstats
@@ -32,14 +33,17 @@ services:
   ether-swarm-services:
     build: ether-swarm-services
     environment:
-      - GG_EXTRA_DATA=Test42
       - GG_BALANCE=1000000000000000000
-      - GG_COINBASE=0x6120de0b6b3a7640000
       - DB_DSN=host=postgres user=ether-swarm-services dbname=ether-swarm-services sslmode=disable password=ether-swarm-services
     ports:
       - "0.0.0.0:8090:8090"
     links:
       - postgres
+
+  ether-swarm-cache:
+    build: ether-swarm-cache
+    ports:
+      - "8091"
 
   browser-solidity:
     build: browser-solidity
