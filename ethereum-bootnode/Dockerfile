@@ -2,7 +2,7 @@ FROM alpine:3.4
 
 ADD go-ethereum /go-ethereum
 RUN \
-  apk add --update go git make gcc musl-dev perl && \
+  apk add --update go git make gcc musl-dev perl curl && \
   ( cd /go-ethereum && rm -rf .git && build/env.sh go run build/ci.go install ./cmd/bootnode ) && \
   cp /go-ethereum/build/bin/bootnode /bootnode && \
   apk del go git make gcc musl-dev && \

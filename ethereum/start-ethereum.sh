@@ -1,0 +1,85 @@
+#!/bin/sh
+
+GETH=/geth
+DATA_DIR=/data
+GENESIS_PATH="${DATA_DIR}/genesis.conf"
+SVC_ENDPOINT="${SVC_URI}/blockchain/info"
+
+mkdir -vp "${DATA_DIR}"
+
+import_genesis() {
+  while true; do
+    curl -sL "${SVC_ENDPOINT}" | python -c \
+    "import sys, json; print(json.dumps(json.load(sys.stdin)['genesis']))" > \
+    "$GENESIS_PATH"
+    file_size=$(wc -c < "$GENESIS_PATH")
+    if [ $file_size -gt 1 ] && \
+        "$GETH" --datadir "${DATA_DIR}" init "${GENESIS_PATH}"; then
+      break
+    fi
+    echo "Waiting 5 secs: ${SVC_ENDPOINT}"
+    sleep 5
+  done
+}
+
+if ! [ -d "${DATA_DIR}"/geth/chaindata ]; then
+  echo "Importing genesis"
+  import_genesis
+fi
+# 
+# wait for bootnode to be populated
+enode_file=$(mktemp)
+while true; do
+  curl -sL "${SVC_ENDPOINT}" | python -c \
+  "import sys, json; print(','.join(json.load(sys.stdin)['bootnodes_urls']))" > \
+  "$enode_file"
+  file_size=$(wc -c < "$enode_file")
+  if [ $file_size -gt 1 ]; then
+    break
+  fi
+  echo "Waiting 5 secs: ${SVC_ENDPOINT}"
+  sleep 5
+done
+enodes_list=$(cat "$enode_file")
+rm "$enode_file"
+
+networkid_file=$(mktemp)
+while true; do
+  curl -sL "${SVC_ENDPOINT}" | python -c \
+  "import sys, json; print(json.load(sys.stdin)['networkid'])" > \
+  "$networkid_file"
+  file_size=$(wc -c < "$networkid_file")
+  echo "file_size 2 $file_size"
+  if [ $file_size -gt 1 ]; then
+    break
+  fi
+  echo "file_size 2 $file_size"
+  echo "Waiting 5 secs: ${SVC_ENDPOINT}"
+  sleep 5
+done
+networkid=$(cat "$networkid_file")
+rm "$networkid_file"
+
+ETHERBASE="0x555dec3aa45317fa672cc1b0b7da077df62a091b" #TODO get from services
+
+# start geth
+exec /geth \
+--datadir "${DATA_DIR}" \
+--maxpeers 100 \
+--rpc \
+--rpccorsdomain "*" \
+--bootnodes "$enodes_list" \
+--ipcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" \
+--rpcapi "db,eth,net,web3" \
+--rpcaddr "0.0.0.0" \
+--ws \
+--wsaddr "0.0.0.0" \
+--wsapi "db,eth,net,web3" \
+--wsorigins "*" \
+--autodag \
+--networkid "$networkid" \
+--nat none \
+--etherbase "${ETHERBASE}" \
+--mine \
+--minerthreads 1 \
+--jitvm false

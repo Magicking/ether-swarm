@@ -13,3 +13,6 @@
 [submodule "ethereum/eth-net-intelligence-api"]
 	path = ethereum/eth-net-intelligence-api
 	url = https://github.com/Magicking/eth-net-intelligence-api
+[submodule "ether-swarm-services"]
+	path = ether-swarm-services
+	url = https://github.com/Magicking/ether-swarm-services.git
