@@ -36,17 +36,21 @@ import_ethash() {
   done
 }
 
+import_key() {
+  pkey_file=$(mktemp)
+  password_file=$(mktemp)
+  echo "${PASSWORD}" > "${password_file}"
+  echo "${PRIVATE_KEY}" > "${pkey_file}"
+  /geth --datadir "${DATA_DIR}" --password "${password_file}" account import "${pkey_file}"
+  rm "${pkey_file}"
+  rm "${password_file}"
+}
+
 if ! [ -d "${DATA_DIR}"/geth/chaindata ]; then
   echo "Importing genesis"
   import_genesis
 fi
 
-if ! [ -d "${ETHASH_DIR}" ]; then
-  echo "Importing ethash"
-  mkdir "${ETHASH_DIR}"
-  import_ethash
-fi
-# 
 # wait for bootnode to be populated
 enode_file=$(mktemp)
 while true; do
@@ -80,7 +84,16 @@ done
 networkid=$(cat "$networkid_file")
 rm "$networkid_file"
 
-#ETHERBASE="0x555dec3aa45317fa672cc1b0b7da077df62a091b" #TODO get from services
+if [ x"${PASSWORD}" != "x" ] && [ x"${PRIVATE_KEY}" != "x" ]; then
+  import_key
+fi
+
+if [ x"${ETHERBASE}" != "x" ]; then
+  mineopts="--autodag --mine --minerthreads 1 --etherbase ${ETHERBASE}"
+  echo "Importing ethash"
+  mkdir "${ETHASH_DIR}"
+  import_ethash
+fi
 
 # start geth
 exec /geth \
@@ -96,10 +109,7 @@ exec /geth \
 --wsaddr "0.0.0.0" \
 --wsapi "db,eth,net,web3" \
 --wsorigins "*" \
---autodag \
 --networkid "$networkid" \
 --nat none \
---etherbase "${ETHERBASE}" \
---mine \
---minerthreads 1 \
+$mineopts \
 --jitvm false
