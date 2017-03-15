@@ -19,3 +19,6 @@
 [submodule "ether-swarm-cache"]
 	path = ether-swarm-cache
 	url = https://github.com/Magicking/ether-swarm-cache.git
+[submodule "EthExplorer"]
+	path = EthExplorer
+	url = https://github.com/Magicking/EthExplorer.git

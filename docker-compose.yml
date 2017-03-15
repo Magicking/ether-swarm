@@ -59,6 +59,11 @@ services:
     ports:
       - "41235:3000"
 
+  eth-explorer:
+    build: EthExplorer
+    environment:
+      - WEB3_RPC=/web3
+
   rev-proxy:
     build: nginx
     ports:
