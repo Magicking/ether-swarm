@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   bootnode:
     build: ethereum-bootnode
@@ -56,8 +56,6 @@ services:
     build: eth-netstats
     environment:
       - WS_SECRET=toto
-    ports:
-      - "41235:3000"
 
   eth-explorer:
     build: EthExplorer
