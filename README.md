@@ -41,7 +41,11 @@ curl -v -X POST http://127.0.0.1:8090/blockchain/create
 
 Access ethnetstat @ & useful URI @
 
-#TODO
+```
+eth-netstat: http://127.0.0.1:41234/stats/
+explorer: http://127.0.0.1:41234/explorer/
+browser-solidity: http://127.0.0.1:41234/
+```
 
 # Errors
 
